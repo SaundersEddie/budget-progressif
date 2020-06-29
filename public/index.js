@@ -1,6 +1,21 @@
 let transactions = [];
 let myChart;
 
+// Create our indexedDB
+const request = window.indexedDB.open("offLineBudget", 1);
+
+request.onupgradeneeded = ({ target }) => {
+  const db = target.result;
+  const objectStore = db.createObjectStore("offLineBudget");
+  objectStore.createIndex("name", "name");
+  objectStore.createIndex("value", "value");
+  objectStore.createIndex("date", "date");
+};
+
+request.onsuccess = (event) => {
+  console.log(request.result);
+};
+
 fetch("/api/transaction")
   .then((response) => {
     return response.json();
@@ -13,16 +28,15 @@ fetch("/api/transaction")
     populateTable();
     populateChart();
   });
-//  EXS 22nd June 2020 - Added in saveRecord for offline
 
-// function saveRecord(record) {
-//   // create a transaction on the pending db with readwrite access
-//   const transaction = db.transaction(["pending"], "readwrite");
-//   // access your pending object store
-//   const store = transaction.objectStore("pending");
-//   // add record to your store with add method.
-//   store.add(record);
-// }
+const saveRecord = (record) => {
+  // create a transaction on the pending db with readwrite access
+  const transaction = offlinedb.transaction(["budget"], "readwrite");
+  // access your pending object store
+  const budgetPending = transaction.objectStore("budget");
+  // add record to your store with add method.
+  budgetPending.add(record);
+};
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
