@@ -2,7 +2,7 @@
 
 ## Description
 
-A small web based budget tracker that will work both online and offline. If the user goes offline during use, the app will automatically update when an online status is deteched.
+A small web based budget tracker that will work both online and offline. If the user goes offline during use, the app will automatically update when an online status is detected.
 
 ## Table of Contents
 
